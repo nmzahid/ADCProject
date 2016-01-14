@@ -1,5 +1,5 @@
-import java.net.*;
 import java.io.*;
+import java.net.*;
 
 public class Client {
 	public static void main(String [] args)
@@ -25,19 +25,19 @@ public class Client {
 			}
 			if(args.length>3)
 			{
-				packet = packet + " " + Integer.parseInt(args[3]);
+				packet = packet + " " + args[3];
 			}
 			if(args.length>4)
 			{
 				packet = packet + " " + args[4];
 			}
+			
 			System.out.println(packet);
 			System.out.println("Connecting to " + serverName + " on port " + port);
 			Socket client = new Socket(serverName, port);
 			System.out.println("Just connected to " + client.getRemoteSocketAddress());
 			OutputStream outToServer = client.getOutputStream();
 			DataOutputStream out = new DataOutputStream(outToServer);
-//			out.writeUTF("Hello from " + client.getLocalSocketAddress());
 			out.writeUTF(packet);
 			InputStream inFromServer = client.getInputStream();
 			DataInputStream in = new DataInputStream(inFromServer);
