@@ -22,7 +22,7 @@ public class TCPServer extends Thread{
 		else
 		{
 			dataTable.put(packet[1], packet[2]);
-			output = "Success!\n";
+			output = "Success!";
 		}	
 		
 		return output;
@@ -41,11 +41,11 @@ public class TCPServer extends Thread{
 			String value = dataTable.get(packet[1]);
 			if(value != null)
 			{
-				output = "Success!\nvalue : " + dataTable.get(packet[1])+ "\n";
+				output = "Success! value : " + dataTable.get(packet[1]);
 			}
 			else
 			{
-				output = "Not found key " + packet[1] +"!\n";
+				output = "Not found key " + packet[1] +"!";
 			}
 		}
 		
@@ -62,7 +62,7 @@ public class TCPServer extends Thread{
 		else
 		{
 			dataTable.remove(packet[1]);
-			output = "Success!\n";
+			output = "Success!";
 		}
 		
 		return output;
@@ -97,36 +97,34 @@ public class TCPServer extends Thread{
 	
 	public void run()
 	{
-		
-		
 		while(true)
 		{
 			try
 			{
-				System.out.println("Waiting for client on port " +
-				serverSocket.getLocalPort() + "...");
+				/* establish connection */
+				Log.log("Waiting for client on port " + serverSocket.getLocalPort() + "...");
 				Socket server = serverSocket.accept();
-				System.out.println("Just received request from " + server.getRemoteSocketAddress());
+				Log.log("Just received request from " + server.getRemoteSocketAddress());
 				
 				/* parsing a request from socket */
 				DataInputStream in = new DataInputStream(server.getInputStream());
 				String request = in.readUTF();				
-				System.out.println("Request: " + request);				
+				Log.log("Client request: " + request);				
 				
 				/* handle the request */
 				String output = null;
 				output = requestHandler(request);
-				System.out.print(output);
+				Log.log(output);
 				
 				/* display dataTable */
-				System.out.print("-dataTable--------\n");
+				Log.log("-dataTable--------");
 				Enumeration<String> key = dataTable.keys();
 			    while(key.hasMoreElements()) 
 			    {
 			    	String str = key.nextElement();
-			    	System.out.println(str + ": " + dataTable.get(str));
+			    	Log.log(str + ": " + dataTable.get(str));
 			    }
-			    System.out.print("------------------\n");
+			    Log.log("------------------");
 			    
 			    /* send the result back to the client */
 				DataOutputStream out = new DataOutputStream(server.getOutputStream());
