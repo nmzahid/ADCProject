@@ -17,7 +17,11 @@ public class Client {
 			System.out.print(">");
 			String input = System.console().readLine();
 			Log.log(input);
-			client.connect();
+			if(client.connect() == false)
+			{
+				Log.log("Connecting to " + serverName + " on port " + port + " failed!");
+				continue;
+			}
 			String response = client.sendRequest(input.split(" "));
 			client.disconnect();
 			Log.log(response);

@@ -10,14 +10,16 @@ public class TCPClient {
 		serverName = destAddr;
 		port = destPort;
 	}
-	public void connect(){
+	public boolean connect(){
 		try{
 			client = new Socket(serverName, port);
+			client.setSoTimeout(3000);
 			Log.log("Connecting to " + serverName + " on port " + port);
 			Log.log("Just connected to " + client.getRemoteSocketAddress());
+			return true;
 		}catch(IOException e)
 	    {
-			e.printStackTrace();
+			return false;
 	    }
 	}
 	
