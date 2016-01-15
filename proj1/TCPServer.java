@@ -7,20 +7,16 @@ public class TCPServer extends Thread{
 	private ServerSocket serverSocket;
 	private Hashtable<String, String> dataTable = new Hashtable<String, String>();
 	
-	public TCPServer(int port) throws IOException
-	{
+	public TCPServer(int port) throws IOException{
 	      serverSocket = new ServerSocket(port);
 	}
 	
-	public String set(String[] packet)
-	{
+	public String set(String[] packet){
 		String output;
-		if(packet.length!=3)
-		{
+		if(packet.length!=3){
 			output = "Error remote input!";
 		}
-		else
-		{
+		else{
 			dataTable.put(packet[1], packet[2]);
 			output = "Success!";
 		}	
@@ -28,23 +24,18 @@ public class TCPServer extends Thread{
 		return output;
 	}
 	
-	public String get(String[] packet)
-	{
+	public String get(String[] packet){
 		String output;
 		
-		if(packet.length!=2)
-		{
+		if(packet.length!=2){
 			output = "Error remote input!";
 		}
-		else
-		{
+		else{
 			String value = dataTable.get(packet[1]);
-			if(value != null)
-			{
+			if(value != null){
 				output = "Success! value : " + dataTable.get(packet[1]);
 			}
-			else
-			{
+			else{
 				output = "Not found key " + packet[1] +"!";
 			}
 		}
@@ -52,15 +43,12 @@ public class TCPServer extends Thread{
 		return output;
 	}
 	
-	public String del(String[] packet)
-	{
+	public String del(String[] packet){
 		String output;
-		if(packet.length!=2)
-		{
+		if(packet.length!=2){
 			output = "Error remote input!";
 		}
-		else
-		{
+		else{
 			dataTable.remove(packet[1]);
 			output = "Success!";
 		}
@@ -68,26 +56,21 @@ public class TCPServer extends Thread{
 		return output;
 	}
 	
-	public void terminate()
-	{
+	public void terminate(){
 		
 	}
 	
-	public String requestHandler(String request)
-	{
+	public String requestHandler(String request){
 		String[] packet = request.split(" ");
 		String output = null;
 		
-		if(packet[0].equals("set"))
-		{
+		if(packet[0].equals("set")){
 			output = set(packet);
 		}
-		else if(packet[0].equals("get"))
-		{
+		else if(packet[0].equals("get")){
 			output = get(packet);
 		}
-		else if(packet[0].equals("del"))
-		{
+		else if(packet[0].equals("del")){
 			output = del(packet);
 		}
 		
@@ -95,12 +78,9 @@ public class TCPServer extends Thread{
 	}
 	
 	
-	public void run()
-	{
-		while(true)
-		{
-			try
-			{
+	public void run(){
+		while(true){
+			try	{
 				/* establish connection */
 				Log.log("Waiting for client on port " + serverSocket.getLocalPort() + "...");
 				Socket server = serverSocket.accept();
@@ -119,8 +99,7 @@ public class TCPServer extends Thread{
 				/* display dataTable */
 				Log.log("-dataTable--------");
 				Enumeration<String> key = dataTable.keys();
-			    while(key.hasMoreElements()) 
-			    {
+			    while(key.hasMoreElements()){
 			    	String str = key.nextElement();
 			    	Log.log(str + ": " + dataTable.get(str));
 			    }
@@ -131,34 +110,31 @@ public class TCPServer extends Thread{
 				out.writeUTF(output);
 			    server.close();
 				    
-			}catch(SocketTimeoutException s)
-			{
+			}
+			catch(SocketTimeoutException s){
 			    System.out.println("Socket timed out!");
 			    break;
-			}catch(IOException e)
-			{
+			}
+			catch(IOException e){
 			    e.printStackTrace();
 			    break;
 			}
 		}
 	}
 	
-	public static void main(String [] args)
-	{
-		if(args.length < 1) 
-		{
+	public static void main(String [] args){
+		if(args.length < 1){
 			System.out.println("Usage: java TCPServer <Port Number>");
 			System.exit(1);
 		}
 		
 		int port = Integer.parseInt(args[0]);
 		
-		try
-		{
+		try{
 			Thread t = new TCPServer(port);
 			t.start();
-		}catch(IOException e)
-		{
+		}
+		catch(IOException e){
 			e.printStackTrace();
 		}
 	}

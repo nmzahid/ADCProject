@@ -14,11 +14,9 @@ public class TCPClient {
 		try{
 			client = new Socket(serverName, port);
 			client.setSoTimeout(3000);
-			Log.log("Connecting to " + serverName + " on port " + port);
-			Log.log("Just connected to " + client.getRemoteSocketAddress());
 			return true;
-		}catch(IOException e)
-	    {
+		}
+		catch(IOException e){
 			return false;
 	    }
 	}
@@ -26,28 +24,23 @@ public class TCPClient {
 	public void disconnect(){
 		try{
 			client.close();
-		}catch(IOException e)
-	    {
+		}
+		catch(IOException e){
 			e.printStackTrace();
 	    }
 	}
 	
-	public String sendRequest(String[] args)
-	{		
+	public String sendRequest(String[] args){		
 		
 		String packet="";
-		try
-		{
-			if(args.length>0)
-			{
+		try{
+			if(args.length>0){
 				packet = args[0];
 			}
-			if(args.length>1)
-			{
+			if(args.length>1){
 				packet = packet + " " + args[1];
 			}
-			if(args.length>2)
-			{
+			if(args.length>2){
 				packet = packet + " " + args[2];
 			}
 			
@@ -58,8 +51,8 @@ public class TCPClient {
 			DataInputStream in = new DataInputStream(inFromServer);
 			return in.readUTF();
 			
-		}catch(IOException e)
-	    {
+		}
+		catch(IOException e){
 			e.printStackTrace();
 			return null;
 	    }

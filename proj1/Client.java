@@ -1,8 +1,6 @@
 public class Client {
-	public static void main(String[] args)
-	{
-		if(args.length < 2)
-		{
+	public static void main(String[] args){
+		if(args.length < 2){
 			System.out.print("Usage: java TCPClient <Host Name/IP> <Port Number>\n");
 			System.exit(1);
 		}
@@ -12,16 +10,19 @@ public class Client {
 		
 		TCPClient client = new TCPClient(serverName, port);
 
-		while(true)
-		{
+		while(true){
 			System.out.print(">");
 			String input = System.console().readLine();
 			Log.log(input);
-			if(client.connect() == false)
-			{
+			if(client.connect() == false){
 				Log.log("Connecting to " + serverName + " on port " + port + " failed!");
 				continue;
 			}
+			else{
+				Log.log("Connecting to " + serverName + " on port " + port);
+				Log.log("Just connected to " + client.getRemoteSocketAddress());
+			}
+
 			String response = client.sendRequest(input.split(" "));
 			client.disconnect();
 			Log.log(response);
