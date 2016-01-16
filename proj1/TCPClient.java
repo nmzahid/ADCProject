@@ -43,6 +43,7 @@ public class TCPClient {
 	public String sendRequest(String[] args){		
 		
 		String packet="";
+
 		try{
 			if(args.length>0){
 				packet = args[0];

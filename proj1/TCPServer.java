@@ -24,12 +24,12 @@ public class TCPServer extends Thread{
 		String output;
 		if(packet.length!=3)
 		{
-			output = "Error remote input!";
+			output = "TCP: Error remote input!\n";
 		}
 		else
 		{
 			dataTable.put(packet[1], packet[2]);
-			output = "Success!\n";
+			output = "TCP: Success!\n";
 		}	
 		
 		return output;
@@ -41,18 +41,18 @@ public class TCPServer extends Thread{
 		
 		if(packet.length!=2)
 		{
-			output = "Error remote input!";
+			output = "TCP: Error remote input!\n";
 		}
 		else
 		{
 			String value = dataTable.get(packet[1]);
 			if(value != null)
 			{
-				output = "Success!\nvalue : " + dataTable.get(packet[1])+ "\n";
+				output = "TCP: Success!\nvalue : " + dataTable.get(packet[1])+ "\n";
 			}
 			else
 			{
-				output = "Not found key " + packet[1] +"!\n";
+				output = "TCP: Not found key " + packet[1] +"!\n";
 			}
 		}
 		
@@ -64,12 +64,12 @@ public class TCPServer extends Thread{
 		String output;
 		if(packet.length!=2)
 		{
-			output = "Error remote input!";
+			output = "TCP: Error remote input!\n";
 		}
 		else
 		{
 			dataTable.remove(packet[1]);
-			output = "Success!\n";
+			output = "TCP: Success!\n";
 		}
 		
 		return output;
@@ -83,19 +83,22 @@ public class TCPServer extends Thread{
 	public String requestHandler(String request)
 	{
 		String[] packet = request.split(" ");
-		String output = null;
+		String output = "";
 		
-		if(packet[0].equals("set"))
+		if(packet[0].equalsIgnoreCase("put"))
 		{
 			output = set(packet);
 		}
-		else if(packet[0].equals("get"))
+		else if(packet[0].equalsIgnoreCase("get"))
 		{
 			output = get(packet);
 		}
-		else if(packet[0].equals("del"))
+		else if(packet[0].equalsIgnoreCase("del"))
 		{
 			output = del(packet);
+		}
+		else{
+			output = "TCP: Error remote input!\n";
 		}
 		
 		return output;
@@ -110,15 +113,15 @@ public class TCPServer extends Thread{
 		{
 			try
 			{
-				System.out.println("TCP Server waiting for client on port " +
+				System.out.println("TCP: Server waiting for client on port " +
 				serverSocket.getLocalPort() + "...");
 				Socket server = serverSocket.accept();
-				System.out.println("Just received request from " + server.getRemoteSocketAddress());
+				System.out.println("TCP: Just received request from " + server.getRemoteSocketAddress());
 				
 				/* parsing a request from socket */
 				DataInputStream in = new DataInputStream(server.getInputStream());
 				String request = in.readUTF();				
-				System.out.println("Request: " + request);				
+				System.out.println("TCP: Request: " + request);				
 				
 				/* handle the request */
 				String output = null;
@@ -126,7 +129,7 @@ public class TCPServer extends Thread{
 				System.out.print(output);
 				
 				/* display dataTable */
-				System.out.print("-dataTable--------\n");
+				System.out.print("TCP: -dataTable---\n");
 				Enumeration<String> key = dataTable.keys();
 			    while(key.hasMoreElements()) 
 			    {
@@ -142,7 +145,7 @@ public class TCPServer extends Thread{
 				    
 			}catch(SocketTimeoutException s)
 			{
-			    System.out.println("Socket timed out!");
+			    System.out.println("TCP: Socket timed out!");
 			    break;
 			}catch(IOException e)
 			{

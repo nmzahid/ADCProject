@@ -17,7 +17,7 @@ public class UDPServer extends Thread{
 	private DatagramSocket serverSocket;
 	private Hashtable<String, String> dataTable = new Hashtable<String, String>();
 	byte[] inData = new byte[1024];             
-        byte[] outData = new byte[1024]; 
+    byte[] outData = new byte[1024]; 
 	public UDPServer(int port) throws IOException
 	{
 	      serverSocket = new DatagramSocket(port);
@@ -28,12 +28,12 @@ public class UDPServer extends Thread{
 		String output;
 		if(packet.length!=3)
 		{
-			output = "Error remote input!";
+			output = "UDP: Error remote input!\n";
 		}
 		else
 		{
 			dataTable.put(packet[1], packet[2]);
-			output = "Success!\n";
+			output = "UDP: Success!\n";
 		}	
 		
 		return output;
@@ -45,18 +45,18 @@ public class UDPServer extends Thread{
 		
 		if(packet.length!=2)
 		{
-			output = "Error remote input!";
+			output = "UDP: Error remote input!\n";
 		}
 		else
 		{
 			String value = dataTable.get(packet[1]);
 			if(value != null)
 			{
-				output = "Success!\nvalue : " + dataTable.get(packet[1])+ "\n";
+				output = "UDP: Success!\nvalue : " + dataTable.get(packet[1])+ "\n";
 			}
 			else
 			{
-				output = "Not found key " + packet[1] +"!\n";
+				output = "UDP: Not found key " + packet[1] +value+"!\n";
 			}
 		}
 		
@@ -68,12 +68,12 @@ public class UDPServer extends Thread{
 		String output;
 		if(packet.length!=2)
 		{
-			output = "Error remote input!";
+			output = "UDP: Error remote input!\n";
 		}
 		else
 		{
 			dataTable.remove(packet[1]);
-			output = "Success!\n";
+			output = "UDP: Success!\n";
 		}
 		
 		return output;
@@ -87,19 +87,22 @@ public class UDPServer extends Thread{
 	public String requestHandler(String request)
 	{
 		String[] packet = request.split(" ");
-		String output = null;
+		String output = "";
 		
-		if(packet[0].equals("set"))
+		if(packet[0].equalsIgnoreCase("put"))
 		{
 			output = set(packet);
 		}
-		else if(packet[0].equals("get"))
+		else if(packet[0].equalsIgnoreCase("get"))
 		{
 			output = get(packet);
 		}
-		else if(packet[0].equals("del"))
+		else if(packet[0].equalsIgnoreCase("del"))
 		{
 			output = del(packet);
+		}
+		else{
+			output = "UDP: Error remote input!\n";
 		}
 		
 		return output;
@@ -114,17 +117,19 @@ public class UDPServer extends Thread{
 		{
 			try
 			{
-				System.out.println("UDP Server waiting for client on port " +
+				inData=new byte[1024];
+				outData=new byte[1024];
+				System.out.println("UDP: Server waiting for client on port " +
 				serverSocket.getLocalPort() + "...");
 				
-                                DatagramPacket datapacket=new DatagramPacket(inData, inData.length);
+                DatagramPacket datapacket=new DatagramPacket(inData, inData.length);
 				serverSocket.receive(datapacket);
-                                System.out.println("Just received request from " + datapacket.getAddress()+":"+datapacket.getPort());
+                System.out.println("UDP: Just received request from " + datapacket.getAddress()+":"+datapacket.getPort());
 				
 				/* parsing a request from socket */
 				
-				String request = new String(datapacket.getData());
-				System.out.println("Request: " + request);				
+				String request = new String(datapacket.getData(),0,datapacket.getLength());
+				System.out.println("UDP: Request: " + request);				
 				
 				/* handle the request */
 				String output = null;
@@ -132,7 +137,7 @@ public class UDPServer extends Thread{
 				System.out.print(output);
 				
 				/* display dataTable */
-				System.out.print("-dataTable--------\n");
+				System.out.print("TDP: -dataTable---\n");
 				Enumeration<String> key = dataTable.keys();
 			    while(key.hasMoreElements()) 
 			    {
@@ -148,7 +153,7 @@ public class UDPServer extends Thread{
 				    
 			}catch(SocketTimeoutException s)
 			{
-			    System.out.println("Socket timed out!");
+			    System.out.println("UDP: Socket timed out!");
 			    break;
 			}catch(IOException e)
 			{

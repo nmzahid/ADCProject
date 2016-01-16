@@ -16,7 +16,7 @@ public class UDPClient {
 	private static String serverName;
 	private static int port;
 	byte[] inData = new byte[1024];             
-        byte[] outData = new byte[1024]; 
+    byte[] outData = new byte[1024]; 
 	public UDPClient(String destAddr, int destPort){
 		serverName = destAddr;
 		port = destPort;
@@ -39,8 +39,10 @@ public class UDPClient {
 	}
 	
 	public String sendRequest(String[] args){		
-		
+		inData=new byte[1024];
+		outData=new byte[1024];
 		String packet="";
+
 		try{
 			if(args.length>0){
 				packet = args[0];
