@@ -4,19 +4,23 @@
  * and open the template in the editor.
  */
 
-
+/**
+ *
+ * @author anamzahid
+ */
 import java.net.*;
 import java.io.*;
 import java.util.*;
 
 
-public class TCPServer extends Thread{
-	private ServerSocket serverSocket;
+public class UDPServer extends Thread{
+	private DatagramSocket serverSocket;
 	private Hashtable<String, String> dataTable = new Hashtable<String, String>();
-	
-	public TCPServer(int port) throws IOException
+	byte[] inData = new byte[1024];             
+        byte[] outData = new byte[1024]; 
+	public UDPServer(int port) throws IOException
 	{
-	      serverSocket = new ServerSocket(port);
+	      serverSocket = new DatagramSocket(port);
 	}
 	
 	public String set(String[] packet)
@@ -110,14 +114,16 @@ public class TCPServer extends Thread{
 		{
 			try
 			{
-				System.out.println("TCP Server waiting for client on port " +
+				System.out.println("UDP Server waiting for client on port " +
 				serverSocket.getLocalPort() + "...");
-				Socket server = serverSocket.accept();
-				System.out.println("Just received request from " + server.getRemoteSocketAddress());
+				
+                                DatagramPacket datapacket=new DatagramPacket(inData, inData.length);
+				serverSocket.receive(datapacket);
+                                System.out.println("Just received request from " + datapacket.getAddress()+":"+datapacket.getPort());
 				
 				/* parsing a request from socket */
-				DataInputStream in = new DataInputStream(server.getInputStream());
-				String request = in.readUTF();				
+				
+				String request = new String(datapacket.getData());
 				System.out.println("Request: " + request);				
 				
 				/* handle the request */
@@ -136,9 +142,9 @@ public class TCPServer extends Thread{
 			    System.out.print("------------------\n");
 			    
 			    /* send the result back to the client */
-				DataOutputStream out = new DataOutputStream(server.getOutputStream());
-				out.writeUTF(output);
-			    server.close();
+				outData=output.getBytes();
+				DatagramPacket outpacket=new DatagramPacket(outData,outData.length,datapacket.getAddress(),datapacket.getPort() );
+			    serverSocket.send(outpacket);
 				    
 			}catch(SocketTimeoutException s)
 			{
@@ -154,4 +160,3 @@ public class TCPServer extends Thread{
 	
 	
 }
-

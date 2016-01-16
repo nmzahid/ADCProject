@@ -11,18 +11,19 @@
 import java.io.*;
 import java.net.*;
 
-public class TCPClient {
-	protected static Socket client;
+public class UDPClient {
+	protected static DatagramSocket client;
 	private static String serverName;
 	private static int port;
-	
-	public TCPClient(String destAddr, int destPort){
+	byte[] inData = new byte[1024];             
+        byte[] outData = new byte[1024]; 
+	public UDPClient(String destAddr, int destPort){
 		serverName = destAddr;
 		port = destPort;
 	}
 	public boolean connect(){
 		try{
-			client = new Socket(serverName, port);
+			client = new DatagramSocket();
 			client.setSoTimeout(3000);
 			return true;
 		}
@@ -32,12 +33,9 @@ public class TCPClient {
 	}
 	
 	public void disconnect(){
-		try{
+		
 			client.close();
-		}
-		catch(IOException e){
-			e.printStackTrace();
-	    }
+		
 	}
 	
 	public String sendRequest(String[] args){		
@@ -53,13 +51,14 @@ public class TCPClient {
 			if(args.length>2){
 				packet = packet + " " + args[2];
 			}
-			
-			OutputStream outToServer = client.getOutputStream();
-			DataOutputStream out = new DataOutputStream(outToServer);
-			out.writeUTF(packet);
-			InputStream inFromServer = client.getInputStream();
-			DataInputStream in = new DataInputStream(inFromServer);
-			return in.readUTF();
+			InetAddress ipAddress = InetAddress.getByName(serverName); 
+			outData=packet.getBytes();
+			DatagramPacket outpacket=new DatagramPacket(outData,outData.length,ipAddress, port);
+			client.send(outpacket);
+			DatagramPacket inpacket=new DatagramPacket(inData, inData.length);
+                        client.receive(inpacket);
+			String response=new String(inpacket.getData());
+			return response;
 			
 		}
 		catch(IOException e){
