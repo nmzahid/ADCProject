@@ -2,6 +2,7 @@ public class Client {
 	public static void main(String[] args){
 		if(args.length < 2){
 			System.out.print("Usage: java TCPClient <Host Name/IP> <Port Number>\n");
+			System.out.print("Usage: java TCPClient <Host Name/IP> <Port Number> UDPClient <Host Name/IP> <Port Number>\n");
 			System.exit(1);
 		}
 		
