@@ -119,17 +119,17 @@ public class UDPServer extends Thread{
 			{
 				inData=new byte[1024];
 				outData=new byte[1024];
-				System.out.println("UDP: Server waiting for client on port " +
+				Log.log("UDP: Server waiting for client on port " +
 				serverSocket.getLocalPort() + "...");
 				
                 DatagramPacket datapacket=new DatagramPacket(inData, inData.length);
 				serverSocket.receive(datapacket);
-                System.out.println("UDP: Just received request from " + datapacket.getAddress()+":"+datapacket.getPort());
+                Log.log("UDP: Just received request from " + datapacket.getAddress()+":"+datapacket.getPort());
 				
 				/* parsing a request from socket */
 				
 				String request = new String(datapacket.getData(),0,datapacket.getLength());
-				System.out.println("UDP: Request: " + request);				
+				Log.log("UDP: Request: " + request);				
 				
 				/* handle the request */
 				String output = null;
@@ -137,14 +137,14 @@ public class UDPServer extends Thread{
 				System.out.print(output);
 				
 				/* display dataTable */
-				System.out.print("TDP: -dataTable---\n");
+				Log.log("TDP: -dataTable---");
 				Enumeration<String> key = dataTable.keys();
 			    while(key.hasMoreElements()) 
 			    {
 			    	String str = key.nextElement();
-			    	System.out.println(str + ": " + dataTable.get(str));
+			    	Log.log(str + ": " + dataTable.get(str));
 			    }
-			    System.out.print("------------------\n");
+			    Log.log("------------------");
 			    
 			    /* send the result back to the client */
 				outData=output.getBytes();
@@ -153,7 +153,7 @@ public class UDPServer extends Thread{
 				    
 			}catch(SocketTimeoutException s)
 			{
-			    System.out.println("UDP: Socket timed out!");
+			    Log.log("UDP: Socket timed out!");
 			    break;
 			}catch(IOException e)
 			{

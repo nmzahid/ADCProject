@@ -113,15 +113,15 @@ public class TCPServer extends Thread{
 		{
 			try
 			{
-				System.out.println("TCP: Server waiting for client on port " +
+				Log.log("TCP: Server waiting for client on port " +
 				serverSocket.getLocalPort() + "...");
 				Socket server = serverSocket.accept();
-				System.out.println("TCP: Just received request from " + server.getRemoteSocketAddress());
+				Log.log("TCP: Just received request from " + server.getRemoteSocketAddress());
 				
 				/* parsing a request from socket */
 				DataInputStream in = new DataInputStream(server.getInputStream());
 				String request = in.readUTF();				
-				System.out.println("TCP: Request: " + request);				
+				Log.log("TCP: Request: " + request);				
 				
 				/* handle the request */
 				String output = null;
@@ -129,14 +129,14 @@ public class TCPServer extends Thread{
 				System.out.print(output);
 				
 				/* display dataTable */
-				System.out.print("TCP: -dataTable---\n");
+				Log.log("TCP: -dataTable---");
 				Enumeration<String> key = dataTable.keys();
 			    while(key.hasMoreElements()) 
 			    {
 			    	String str = key.nextElement();
-			    	System.out.println(str + ": " + dataTable.get(str));
+			    	Log.log(str + ": " + dataTable.get(str));
 			    }
-			    System.out.print("------------------\n");
+			    System.out.print("------------------");
 			    
 			    /* send the result back to the client */
 				DataOutputStream out = new DataOutputStream(server.getOutputStream());
@@ -145,7 +145,7 @@ public class TCPServer extends Thread{
 				    
 			}catch(SocketTimeoutException s)
 			{
-			    System.out.println("TCP: Socket timed out!");
+			    Log.log("TCP: Socket timed out!");
 			    break;
 			}catch(IOException e)
 			{
