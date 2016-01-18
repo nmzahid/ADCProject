@@ -1,0 +1,52 @@
+put 100 123
+put 101 abc
+put 102 asdddd
+put 103 hellow
+put 104 nobody
+put 105 computer
+put 106 911
+put 107 sweet
+put 108 123456789
+put 109 aaaaaaaaa
+put 110 0987654321
+put 111 aaaaaaaaaaa
+put 112 bbbbbbbbbbb
+put 113 ccccccccccc
+get 100
+get 101
+get 102
+get 103
+get 104
+get 105
+get 106
+get 107
+get 108
+get 109
+get 110
+get 111
+get 112
+get 113
+del 100
+del 101
+del 102
+del 103
+del 104
+del 105
+del 106
+del 107
+del 108
+del 109
+del 110
+del 111
+del 112
+del 113
+put
+put invalidcommand
+put a invalid command
+get
+get notexist
+get invalid command
+del
+del notexist
+del invalid command
+quit

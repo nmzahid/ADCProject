@@ -15,21 +15,36 @@ import java.io.*;
 public class Server extends Thread{	
 	public static void main(String [] args)
 	{
-		if(args.length < 1) 
-		{
-			System.out.println("Usage: java TCPServer <Port Number> UDPServer <Port Number>");
+		int port = 0;
+		boolean isUdp = false;
+		if((args.length==2) && args[0].equals("-u")){
+			port = Integer.parseInt(args[1]);
+			isUdp = true;
+		}
+		else if(args.length==1){
+			port = Integer.parseInt(args[0]);
+		}
+		else{
+			System.out.println("Usage: java Server [-u] <Port Number>");
 			System.exit(1);
 		}
-		System.out.println(args[0]+" "+args[1]+" "+args[2]);
-		int tcpport = Integer.parseInt(args[0]);
-                
-		int udpport=Integer.parseInt(args[2]);
+
+		if(port<=0 || port>65535){
+			System.out.println("Error, port number not in range.");
+			System.exit(1);
+		}
+
 		try
 		{
-			Thread t = new TCPServer(tcpport);
-			t.start();
-                        Thread t2=new UDPServer(udpport);
-                        t2.start();
+			if(isUdp){
+				Thread t=new UDPServer(port);
+            	t.start();
+			}
+			else{
+				Thread t = new TCPServer(port);
+				t.start();
+			}
+			
 		}catch(IOException e)
 		{
 			e.printStackTrace();

@@ -1,55 +1,37 @@
 import java.io.*;
-import java.util.*;
 
 public class Client {
 	public static void main(String[] args){
 		if(args.length < 2){
-			System.out.print("Usage: java Client <Host Name/IP> <Port Number> UDPClient <Host Name/IP> <Port Number>\n");
+			System.out.print("Usage: java Client [-u] <Host Name/IP> <Port Number>\n");
+			System.exit(1);
+		}
+
+		boolean isUdp = false;
+		String serverName = "";
+		int port = 0;
+
+		if(args.length == 3){
+			isUdp = true;
+			serverName = args[1];
+			port = Integer.parseInt(args[2]);
+		}
+		else if(args.length==2){
+			serverName = args[0];
+			port = Integer.parseInt(args[1]);
+		}
+		else{
+			System.out.print("Usage: java Client [-u] <Host Name/IP> <Port Number>\n");
 			System.exit(1);
 		}
 		
-		String serverName = args[0];
-		int port = Integer.parseInt(args[1]);
-		
-        String UDPServerName = args[3];
-		int UDPport = Integer.parseInt(args[4]);
-		TCPClient client = new TCPClient(serverName, port);
-        UDPClient client2=new UDPClient(UDPServerName,UDPport);
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.print(">");
-		while(scanner.hasNextLine()){
-			String input = scanner.nextLine();
-			System.out.print(input);
-			if(input.equals("quit"))
-			{
-				break;
-			}
-			// String input = System.console().readLine();
-			Log.log(input);
-			if(client.connect() == false){
-				Log.log("Connecting to TCP Server at " + serverName + " on port " + port + " failed!");
-				continue;
-			}
-            else if(client2.connect()==false)
-            {
-                Log.log("Connecting to UDP Server at " + serverName + " on port " + port + " failed!");
-				continue;
-            }
-			else{
-				Log.log("Connecting to TCP Server at " + serverName + " on port " + port);
-				Log.log("Just connected to TCP Server at " + client.client.getRemoteSocketAddress()+"\n------------------\n");
-			    Log.log("Connecting to UDP Server at " + UDPServerName + " on port " + UDPport);
-				Log.log("Just connected to UDP Server at " + serverName+":"+port+"\n------------------\n");
-			}
-
-			String response = client.sendRequest(input.split(" "));
-            String response2 = client2.sendRequest(input.split(" "));
-			client.disconnect();
-            client2.disconnect();
-			Log.log(response);
-            Log.log(response2);
-            System.out.print(">");
+		if(!isUdp){
+			TCPClient tcpClient = new TCPClient(serverName, port);
+			tcpClient.run();
 		}
+		else{
+        	UDPClient udpClient = new UDPClient(serverName,port);
+        	udpClient.run();
+        }
 	}
 }

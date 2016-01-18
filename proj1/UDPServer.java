@@ -18,6 +18,7 @@ public class UDPServer extends Thread{
 	private Hashtable<String, String> dataTable = new Hashtable<String, String>();
 	byte[] inData = new byte[1024];             
     byte[] outData = new byte[1024]; 
+
 	public UDPServer(int port) throws IOException
 	{
 	      serverSocket = new DatagramSocket(port);
@@ -52,7 +53,7 @@ public class UDPServer extends Thread{
 			String value = dataTable.get(packet[1]);
 			if(value != null)
 			{
-				output = "UDP: Success!\nvalue : " + dataTable.get(packet[1])+ "\n";
+				output = "UDP: Success! value : " + dataTable.get(packet[1])+ "\n";
 			}
 			else
 			{
@@ -102,7 +103,7 @@ public class UDPServer extends Thread{
 			output = del(packet);
 		}
 		else{
-			output = "UDP: Error remote input!\n";
+			output = "UDP: Malformed request!\n";
 		}
 		
 		return output;
@@ -111,7 +112,7 @@ public class UDPServer extends Thread{
 	
 	public void run()
 	{
-		
+		Log TCPServerLog = new Log("UDPServer.log");
 		
 		while(true)
 		{
@@ -119,17 +120,16 @@ public class UDPServer extends Thread{
 			{
 				inData=new byte[1024];
 				outData=new byte[1024];
-				Log.log("UDP: Server waiting for client on port " +
-				serverSocket.getLocalPort() + "...");
+				TCPServerLog.log("UDP: Server waiting for client on port " + serverSocket.getLocalPort() + "...");
 				
+				/* receive request */
                 DatagramPacket datapacket=new DatagramPacket(inData, inData.length);
 				serverSocket.receive(datapacket);
-                Log.log("UDP: Just received request from " + datapacket.getAddress()+":"+datapacket.getPort());
+                TCPServerLog.log("UDP: Just received request from " + datapacket.getAddress()+":"+datapacket.getPort());
 				
 				/* parsing a request from socket */
-				
 				String request = new String(datapacket.getData(),0,datapacket.getLength());
-				Log.log("UDP: Request: " + request);				
+				TCPServerLog.log("UDP: Request: " + request);				
 				
 				/* handle the request */
 				String output = null;
@@ -137,23 +137,23 @@ public class UDPServer extends Thread{
 				System.out.print(output);
 				
 				/* display dataTable */
-				Log.log("TDP: -dataTable---");
+				TCPServerLog.log("TDP: -dataTable---");
 				Enumeration<String> key = dataTable.keys();
 			    while(key.hasMoreElements()) 
 			    {
 			    	String str = key.nextElement();
-			    	Log.log(str + ": " + dataTable.get(str));
+			    	TCPServerLog.log(str + ": " + dataTable.get(str));
 			    }
-			    Log.log("------------------");
+			    TCPServerLog.log("------------------");
 			    
 			    /* send the result back to the client */
 				outData=output.getBytes();
-				DatagramPacket outpacket=new DatagramPacket(outData,outData.length,datapacket.getAddress(),datapacket.getPort() );
+				DatagramPacket outpacket=new DatagramPacket(outData,output.length(),datapacket.getAddress(),datapacket.getPort() );
 			    serverSocket.send(outpacket);
 				    
 			}catch(SocketTimeoutException s)
 			{
-			    Log.log("UDP: Socket timed out!");
+			    TCPServerLog.log("UDP: Socket timed out!");
 			    break;
 			}catch(IOException e)
 			{

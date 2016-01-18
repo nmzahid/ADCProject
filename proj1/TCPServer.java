@@ -98,7 +98,7 @@ public class TCPServer extends Thread{
 			output = del(packet);
 		}
 		else{
-			output = "TCP: Error remote input!\n";
+			output = "TCP: Malformed request!\n";
 		}
 		
 		return output;
@@ -107,21 +107,22 @@ public class TCPServer extends Thread{
 	
 	public void run()
 	{
-		
+		Log TCPServerLog = new Log("TCPServer.log");
 		
 		while(true)
 		{
 			try
 			{
-				Log.log("TCP: Server waiting for client on port " +
-				serverSocket.getLocalPort() + "...");
+				TCPServerLog.log("TCP: Server waiting for client on port " + serverSocket.getLocalPort() + "...");
+
+				/* receive request */
 				Socket server = serverSocket.accept();
-				Log.log("TCP: Just received request from " + server.getRemoteSocketAddress());
+				TCPServerLog.log("TCP: Just received request from " + server.getRemoteSocketAddress());
 				
 				/* parsing a request from socket */
 				DataInputStream in = new DataInputStream(server.getInputStream());
 				String request = in.readUTF();				
-				Log.log("TCP: Request: " + request);				
+				TCPServerLog.log("TCP: Request: " + request);				
 				
 				/* handle the request */
 				String output = null;
@@ -129,14 +130,14 @@ public class TCPServer extends Thread{
 				System.out.print(output);
 				
 				/* display dataTable */
-				Log.log("TCP: -dataTable---");
+				TCPServerLog.log("TCP: -dataTable---");
 				Enumeration<String> key = dataTable.keys();
 			    while(key.hasMoreElements()) 
 			    {
 			    	String str = key.nextElement();
-			    	Log.log(str + ": " + dataTable.get(str));
+			    	TCPServerLog.log(str + ": " + dataTable.get(str));
 			    }
-			    System.out.print("------------------");
+			    TCPServerLog.log("------------------");
 			    
 			    /* send the result back to the client */
 				DataOutputStream out = new DataOutputStream(server.getOutputStream());
@@ -145,7 +146,7 @@ public class TCPServer extends Thread{
 				    
 			}catch(SocketTimeoutException s)
 			{
-			    Log.log("TCP: Socket timed out!");
+			    TCPServerLog.log("TCP: Socket timed out!");
 			    break;
 			}catch(IOException e)
 			{

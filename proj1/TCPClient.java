@@ -10,17 +10,19 @@
  */
 import java.io.*;
 import java.net.*;
+import java.util.*;
 
 public class TCPClient {
-	protected static Socket client;
-	private static String serverName;
-	private static int port;
+	protected Socket client;
+	private String serverName;
+	private int port;
 	
-	public TCPClient(String destAddr, int destPort){
+	TCPClient(String destAddr, int destPort){
 		serverName = destAddr;
 		port = destPort;
 	}
-	public boolean connect(){
+
+	boolean connect(){
 		try{
 			client = new Socket(serverName, port);
 			client.setSoTimeout(3000);
@@ -31,7 +33,7 @@ public class TCPClient {
 	    }
 	}
 	
-	public void disconnect(){
+	void disconnect(){
 		try{
 			client.close();
 		}
@@ -40,7 +42,7 @@ public class TCPClient {
 	    }
 	}
 	
-	public String sendRequest(String[] args){		
+	String sendRequest(String[] args){		
 		
 		String packet="";
 
@@ -54,10 +56,12 @@ public class TCPClient {
 			if(args.length>2){
 				packet = packet + " " + args[2];
 			}
-			
+			/* send request */
 			OutputStream outToServer = client.getOutputStream();
 			DataOutputStream out = new DataOutputStream(outToServer);
 			out.writeUTF(packet);
+
+			/* receive response */
 			InputStream inFromServer = client.getInputStream();
 			DataInputStream in = new DataInputStream(inFromServer);
 			return in.readUTF();
@@ -67,6 +71,39 @@ public class TCPClient {
 			e.printStackTrace();
 			return null;
 	    }
+	}
+
+	public void run(){
+		Log TCPClientLog = new Log("TCPClient.log");
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print(">");
+		while(scanner.hasNextLine()){
+			String input = scanner.nextLine();
+			System.out.print(input);
+			if(input.equals("quit"))
+			{
+				break;
+			}
+
+			if(connect() == false){
+				TCPClientLog.log("Connecting to TCP Server at " + serverName + " on port " + port + " failed!");
+				continue;
+			}
+			else{
+				TCPClientLog.log("Connecting to TCP Server at " + serverName + " on port " + port);
+				TCPClientLog.log("Just connected to TCP Server at " + client.getRemoteSocketAddress());
+			}
+
+			/* send request to server */
+			TCPClientLog.log(input);
+
+			/* get response from server */
+			String response = sendRequest(input.split(" "));
+			disconnect();
+			TCPClientLog.log(response);
+            System.out.print(">");
+        }
 	}
 }
 

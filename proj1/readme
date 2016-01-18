@@ -1,0 +1,23 @@
+@compile instruction
+javac *.java
+
+@Server excution instruction
+sudo java Server [-u] <portnumber>
+-u : using UDP protocol instead of TCP
+
+@Client excution instruction
+java Client [-u] <hostname> <portnumber>
+-u : using UDP protocol instead of TCP
+
+@Client valid command
+put <key> <value>
+get <key>
+del <key>
+
+@log files
+each type of servers and clients has its own .log file, ig. TCPServer.log, UDPServer.log, TCPClient.log and UDPClient.log.
+
+@Script test
+java Client [-u] <hostname> <portnumber> < <scriptfile>
+scriptfile: there are two scripts, which are test.in command_script.txt
+
