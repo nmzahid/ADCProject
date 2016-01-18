@@ -40,6 +40,7 @@ del 110
 del 111
 del 112
 del 113
+put 100 overwrite
 put
 put invalidcommand
 put a invalid command
