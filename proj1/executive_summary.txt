@@ -1,0 +1,10 @@
+Executive Summary
+
+Scope & Purpose:
+Project # 1 was a great way to reconnect with the networking basics. To use and understand the advanced and current protocols of networking, it is very essential to understand the basics first. This project serves that purpose through the implementation of a basic single threaded server and client communicating over TCP and UDP. It also helped in understanding the differences between these two protocols and how each of them is suitable for different applications. 
+
+Technical Impression:
+This project encompassing the basic implementation of TCP and UDP was relatively simpler to implement specially with the liberty to choose any language. We chose Java which is a relatively high level language and it made the implementation much shorter. 
+The instructions about the requirements for the client and server were quite descriptive and detailed which helped to understand the project’s scope and implement those requirements. It was interesting how similar both the protocols are even in implementation because they are essentially doing the same task of communicating between the client and server. The difference in reliability for the protocols became obvious while implementation where one uses a connection oriented communication while the other doesn’t. 
+In our project we have implemented both UDP and TCP in the same application such that when the user runs the program, both the clients run the same commands from the script and communicate with respective servers. We have used the usual Java sockets and datagram sockets to communicate in TCP and UDP respectively. The only bug we ran into while implementing the program was the conversion from byte array to strings in UDP and cleaning of byte arrays for each communication. Overall it was technically a good experience to implement the protocols and analyze them in real time. 
+It is interesting to imagine all the additional functionalities that can be added to this project like multiple threads, RPC and more and see how things will vary in terms of functionality, implementation and performance. 
