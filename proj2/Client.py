@@ -1,30 +1,41 @@
+import sys
 import xmlrpclib
 
-class Client:
-	def __init__(self):
+if len(sys.argv) < 3:
+	print "Invalid port number"
+	exit()
 
-client = xmlrpclib.ServerProxy("http://localhost:8000/")
+addr = sys.argv[1]
+portnumber = sys.argv[2]
 
-file=open("filename.txt",'r')
-for line in file.readline():
+s = xmlrpclib.ServerProxy('http://localhost:'+portnumber)
+print s.system.listMethods()
+
+# file=open("filename.txt",'r')
+# for line in file.readline():
+def commandHandler(line):
     command=line.split( )
-    length=len(command)
-    if command[0] is 'set':
-        if length is 3:
-            response=client.set(command[1],command[2])
+    if command[0] == 'set':
+        if len(command) == 3:
+            return s.set(command[1],command[2])
         else:
-            response="Invalid input for set!"
-    elif command[0] is 'get':
-        if length is 2:
-            response=client.get(command[1])
+            return "Invalid input for set!"
+    elif command[0] == 'get':
+        if len(command) == 2:
+            return s.get(command[1])
         else:
-            response="Invalid input for get!"
+            return "Invalid input for get!"
 
-    elif command[0] is 'del':
-        if length is 2:
-            response=client.delete(command[1])
+    elif command[0] == 'del':
+        if len(command) == 2:
+            return s.delete(command[1])
         else:
-            response="Invalid input for del!"
+            return "Invalid input for del!"
+    else:
+    	return "Invalid input!"
 
 
-print(response)
+
+while True:
+    command = raw_input("client> ")
+    print commandHandler(command)
