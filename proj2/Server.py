@@ -1,6 +1,8 @@
 import sys
+import SocketServer
 from SimpleXMLRPCServer import SimpleXMLRPCServer
 from SimpleXMLRPCServer import SimpleXMLRPCRequestHandler
+from threading import Thread
 
 if len(sys.argv) < 2:
 	print "Invalid port number"
@@ -8,32 +10,38 @@ if len(sys.argv) < 2:
 
 portnumber = int(sys.argv[1])
 
-class RequestHandler(SimpleXMLRPCRequestHandler):
-    rpc_paths = ('/RPC2',)
-
-server = SimpleXMLRPCServer(("localhost", portnumber), requestHandler=RequestHandler)
-server.register_introspection_functions()
+class AsyncXMLRPCServer(SocketServer.ThreadingMixIn,SimpleXMLRPCServer): pass
 
 hashmap={}
 def get(key):
-    if key in hashmap:
-        return hashmap[key]
-    else:
-        return "Key doesn't exist"
+	retStr = ''
+	if key in hashmap:
+		retStr = hashmap[key]
+	else:
+		retStr = "Key doesn't exist"
+	return retStr
 
 def set(key,value):
-    if key is None:
-        return "Key value invalid"
-    else:
-        hashmap.update({key:value})
-        return "Successfully added "+key+":"+value
+	retStr = ''
+	if key is None:
+		retStr = "Key value invalid"
+	else:
+		hashmap.update({key:value})
+		
+		retStr = "Successfully added "+key+":"+value
+	return retStr
 
 def delete(key):
-    if key is None:
-        return "Key value invalid"
-    else:
-        del hashmap[key]
-        return "Successfully deleted "+key
+	retStr = ''
+	if key is None:
+		retStr = "Key value invalid"
+	else:
+		del hashmap[key]
+		retStr = "Successfully deleted "+key
+	return retStr
+
+server = AsyncXMLRPCServer(("localhost", portnumber), SimpleXMLRPCRequestHandler)
+server.register_introspection_functions()
 
 server.register_function(get)
 server.register_function(set)
