@@ -40,10 +40,9 @@ def commandHandler(line):
 
 
 
-while True:
-    with open("file.txt", "r") as inputfile:
-    	for line in inputfile:
-    		command=line
-    		logfile.log("Response from server: "+commandHandler(command))
+with open("file.txt", "r") as inputfile:
+    for line in inputfile:
+    	command=line
+    	logfile.log("Response from server: "+commandHandler(command))
     #command = raw_input("client> ")
     
