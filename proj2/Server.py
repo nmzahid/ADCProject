@@ -20,6 +20,7 @@ class AsyncXMLRPCServer(SocketServer.ThreadingMixIn,SimpleXMLRPCServer): pass
 
 
 def get(key):
+	logfile.log("Received request from client: get "+key)
 	mutex.acquire()
 	retStr = ''
 	if key in hashmap:
@@ -27,9 +28,11 @@ def get(key):
 	else:
 		retStr = "Key doesn't exist"
 	mutex.release()
+	logfile.log("Sending response to client: "+retStr)
 	return retStr
 
 def set(key,value):
+	logfile.log("Received request from client: set "+key+","+value)
 	mutex.acquire()
 	retStr = ''
 	if key is None:
@@ -38,9 +41,11 @@ def set(key,value):
 		hashmap.update({key:value})		
 		retStr = "Successfully added "+key+":"+value
 	mutex.release()
+	logfile.log("Sending response to client: "+retStr)
 	return retStr
 
 def delete(key):
+	logfile.log("Received request from client: delete "+key)
 	mutex.acquire()
 	retStr = ''
 	if key is None:
@@ -49,6 +54,7 @@ def delete(key):
 		del hashmap[key]
 		retStr = "Successfully deleted "+key
 	mutex.release()
+	logfile.log("Sending response to client: "+retStr)
 	return retStr
 
 server = AsyncXMLRPCServer(("localhost", portnumber), SimpleXMLRPCRequestHandler)
