@@ -8,7 +8,3 @@ class Log:
 		logStr = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 		with open(self.fileName, "a") as myfile:
 			myfile.write("["+ logStr + "] " + data + "\n")
-
-
-x = Log("h.log")
-x.log("123")
