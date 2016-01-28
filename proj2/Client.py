@@ -17,6 +17,7 @@ print s.system.listMethods()
 # file=open("filename.txt",'r')
 # for line in file.readline():
 def commandHandler(line):
+    logfile.log("Sending command: "+line)
     command=line.split( )
     if command[0] == 'set':
         if len(command) == 3:
@@ -40,5 +41,9 @@ def commandHandler(line):
 
 
 while True:
-    command = raw_input("client> ")
-    print commandHandler(command)
+    with open("file.txt", "r") as inputfile:
+    	for line in inputfile:
+    		command=line
+    		logfile.log("Response from server: "+commandHandler(command))
+    #command = raw_input("client> ")
+    
