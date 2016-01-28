@@ -1,5 +1,6 @@
 import sys
 import xmlrpclib
+from Log import Log
 
 if len(sys.argv) < 3:
 	print "Invalid port number"
@@ -8,7 +9,7 @@ if len(sys.argv) < 3:
 addr = sys.argv[1]
 portnumber = sys.argv[2]
 
-s = xmlrpclib.ServerProxy('http://localhost:'+portnumber)
+s = xmlrpclib.ServerProxy('http://'+addr+':'+portnumber)
 print s.system.listMethods()
 
 # file=open("filename.txt",'r')
