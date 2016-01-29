@@ -4,6 +4,7 @@ from SimpleXMLRPCServer import SimpleXMLRPCServer
 from SimpleXMLRPCServer import SimpleXMLRPCRequestHandler
 from threading import Thread, Lock
 from Log import Log
+import socket
 
 if len(sys.argv) < 2:
 	print "Invalid port number"
@@ -57,7 +58,7 @@ def delete(key):
 	logfile.log("Sending response to client: "+retStr)
 	return retStr
 
-server = AsyncXMLRPCServer(("localhost", portnumber), SimpleXMLRPCRequestHandler)
+server = AsyncXMLRPCServer((socket.gethostbyname(socket.gethostname()), portnumber), SimpleXMLRPCRequestHandler)
 server.register_introspection_functions()
 
 server.register_function(get)
