@@ -1,0 +1,10 @@
+python version: python 2.7.10
+
+execution instruction:
+	python Server.py <socket-number>
+	python Client.py <host-ip-address> <host-socket> [test-file-script]
+
+validate command in Client.py:
+	set <key> <value>
+	get <key>
+	del <key>
