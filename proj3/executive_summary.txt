@@ -1,7 +1,7 @@
 Executive Summary
 
 Scope & Purpose:
-Project # 2 was great way to learn the remote call procedures. RPC is different to TCP or UDP. TCP and UDP are protocols to connect to remote clients and send data to it. But RPC is calling functions which are in remote servers. In this project, we also implemented it as a multi-thread server. It can handle multiple requests from different clients in the same time. It indeed helped us to learn both the RPC and multi-thread controning techniques.
+Project # 3 was great way to learn the remote call procedures. RPC is different to TCP or UDP. TCP and UDP are protocols to connect to remote clients and send data to it. But RPC is calling functions which are in remote servers. In this project, we also implemented it as a multi-thread server. It can handle multiple requests from different clients in the same time. It indeed helped us to learn both the RPC and multi-thread controning techniques.
 
 Technical Impression:
 This project encompassing the basic implementation of RPC. We choose Python as our programming language and the RPC library is xmlrpclib which is simple for us to develope this project. And Python is a script language which is different and simple compared to Java.

@@ -8,3 +8,5 @@ validate command in Client.py:
 	set <key> <value>
 	get <key>
 	del <key>
+
+Put all servers' IP address in server_ip_list.txt. The default virtual machines which servers run on are n02, n03, n04, n05 and n06. The IP address are 172.22.71.27, 172.22.71.28, 172.22.71.29, 172.22.71.30 and 172.22.71.31. And servers use socket 8000 for synchronization communication.
